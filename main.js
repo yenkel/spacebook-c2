@@ -1,35 +1,59 @@
-var posts = [];
-var id = 1;
+var posts = [{
+    text: "Post 1",
+    comments: [
+        { text: "Post 1, comment 1!" },
+        { text: "Post 1, comment 2!" },
+        { text: "Post 1, comment 3!" }
+    ]
+}, {
+    text: "Post 2",
+    comments: [
+        { text: "Post 2, comment 1!" },
+        { text: "Post 2, comment 2!" },
+        { text: "Post 2, comment 3!" }
+    ]
+}, {
+    text: "Post 3",
+    comments: [
+        { text: "Post 3, comment 1!" },
+        { text: "Post 3, comment 2!" },
+        { text: "Post 3, comment 3!" }
+    ]
+}];
 
+var renderPosts = function() {
+    $('.posts').empty();
 
-var addPost = function(text, id) {
-    var newPost = {
-        "text": text,
-        "id": id
+    for (var i = 0; i < posts.length; i += 1) {
+        var post = posts[i];
+
+        var commentsContainer = '<div class="comments-container">' + '<div class=comments-list></div>' +
+            '<input type="text" class="comment-name">' +
+            '<button class="btn btn-primary add-comment">Post Comment</button> </div>';
+
+        $('.posts').append('<div class="post">' + '<a href="#" class="remove">remove</a> ' + '<a href="#" class="show-comments">comments</a> ' + post.text +
+            commentsContainer + '</div>');
     };
-    posts.push(newPost);
 };
 
-$(".btn").on("click", function() {
-    var text = $("input").val();
-    addPost(text, id);
-    updatePosts();
-});
+var renderComments = function() {
+        // start here!
+        $('.comments-list').empty();
 
-var updatePosts = function() {
-    $(".posts").empty();
-    id += 1;
+        for (var i = 0; i < posts.length; i += 1) {
+            var post = posts[i];
 
-    for (var i = 0; i < posts.length; i++) {
-        var com = "<div class='form-group'>" + "<input type='text' placeholder='comment'></input></div>";
-        $('.posts').append('<p>' +
-            '<button type="button" class="btn"><a href="#" data-id="' + posts[i].id + '" class="remove">remove</a> </button> ' +
-            posts[i].text + "</p>" + com);
-    }
-};
+            var $post = $('.posts').find('.post').eq(i);
 
+            for (var j = 0; j < post.comments.length; j += 1) {
+                var comment = post.comments[i];
+                $post.find('.comments-list').append(
+                    '<div class="comment"> ' + comment.text +
+                    ' <button class="btn btn-danger remove-comment">Remove Comment</button>' +
+                    '</div>'
+                );
+            }
+        };
 
-$(".posts").on("click", "button", function() {
-    $(this).closest('p').remove();
-    posts.splice(this, 1);
-});
+        renderPosts();
+        renderComments();
